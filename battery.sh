@@ -46,10 +46,11 @@ if [ $amps -ge 0 ]; then
 else 
 	charging=`echo "Discharging with "`
 fi
-volts=`echo $stats \
+millivolts=`echo $stats \
 |sed -E -e 's/.*"AppleRawBatteryVoltage" = ([0-9]*).*/\1/g'`
-#echo $volts
-echo $charging `echo "scale=3;("$volts"/1000 * "$amps")/1000" \
+volts=`echo "scale=2;$millivolts/1000" |bc -l`
+echo "Battery voltage "$volts" V"
+echo $charging `echo "scale=3;("$volts" * "$amps")/1000" \
 |bc -l \
 |sed -E -e 's/.*/& Watts/'`
 
