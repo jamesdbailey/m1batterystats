@@ -25,7 +25,7 @@ echo "Cycle count is "$cycles
 
 ktemp=`echo $stats \
 |sed -E -e 's/.*"Temperature" = ([0-9]+).*/\1/g'`
-echo "Battery temperature "`echo "scale=3;("$ktemp"/10-273.15)*(9/5)+32" |bc -l`" °F"
+echo "Battery temperature "`echo "scale=2;("$ktemp"/10-273.15)*(9/5)+32" |bc -l`" °F ("`echo "scale=2;("$ktemp"/10-273.15)" |bc -l`" °C)"
 
 watts=`echo $stats \
 |sed -E -e 's/.*"Watts"=([0-9]+).*/\1/'`
