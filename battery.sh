@@ -36,7 +36,8 @@ fi
 amps=`echo $stats \
 |sed -E -e 's/.*"InstantAmperage" = ([0-9]*).*/\1/g' \
 |bitwise -od -wd`
-#echo $amps
+echo Instant Amperage $amps mA
+
 if [ $amps -ge 0 ]; then
 	if [ $amps -eq 0 ]; then
 		charging=`echo "Connected at "`
@@ -71,8 +72,12 @@ echo "State of charge "$stateofcharge"%"
 
 remh=` echo $currcharge/$amps |bc -l`
 if [ `echo $remh |cut -c 1` == '-' ]; then
-	remmin=`echo "(("$remh"*60))*-1" |bc ` 
-	remimin=`echo "scale=0;"$remmin"/1" |bc`
-	remsec=`echo ""$remmin"-"$remimin"" |bc `
-	echo `echo "("$remmin"/60)" |bc` hours : `echo "scale=0;("$remsec"*60)/1" |bc` min
+	remh=`echo "$remh*-1" |bc ` 
+	remih=`echo "scale=0;$remh/1" |bc`
+	remmin=`echo "scale=0;(($remh-$remih+0.005)*60)/1" |bc `
+	if [ $remmin -lt 0 ]; then
+		echo Time Remaining $remih:0$remmin
+	else
+		echo Time Remaining $remih:$remmin
+	fi
 fi
