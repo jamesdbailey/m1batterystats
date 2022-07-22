@@ -69,3 +69,10 @@ stateofcharge=`echo $stats \
 |sed -E -e 's/.*"StateOfCharge"=([0-9]*).*/\1/g'`
 echo "State of charge "$stateofcharge"%"
 
+remh=` echo $currcharge/$amps |bc -l`
+if [ `echo $remh |cut -c 1` == '-' ]; then
+	remmin=`echo "(("$remh"*60))*-1" |bc ` 
+	remimin=`echo "scale=0;"$remmin"/1" |bc`
+	remsec=`echo ""$remmin"-"$remimin"" |bc `
+	echo `echo "("$remmin"/60)" |bc` hours: `echo "scale=0;("$remsec"*60)/1" |bc` min
+fi
